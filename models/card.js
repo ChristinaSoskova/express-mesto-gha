@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose';
+const mongoose = require('mongoose');
 
-export const cardSchema = new Schema({
+ const cardSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -25,4 +25,4 @@ export const cardSchema = new Schema({
   }
 });
 
-module.exports = Schema.model('card', cardSchema);
+module.exports = mongoose.model('card', cardSchema);
