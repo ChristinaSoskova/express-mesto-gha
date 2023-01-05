@@ -6,14 +6,13 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const app = express();
 
-
 mongoose.set("strictQuery", false);
 
 const { PORT = 3000, DB = "mongodb://localhost:27017/mestodb" } = process.env;
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '63b5990f90280eb0a1f6de1f'// вставьте сюда _id созданного в предыдущем пункте пользователя
+    _id: "63b5990f90280eb0a1f6de1f", // вставьте сюда _id созданного в предыдущем пункте пользователя
   };
   next();
 });
@@ -33,6 +32,3 @@ app.listen(PORT, () => {
 mongoose.connect(DB);
 
 module.exports = { app, DB };
-
-
-
