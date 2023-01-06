@@ -35,7 +35,7 @@ module.exports.deleteCard = (req, res, next) => {
   cardSchema
     .findById(req.params.cardId)
     .then((card) => {
-        card.delete();
+      return card.remove().then(() => res.send({ message: 'Карточка успешно удалена' }));
       })
     .catch((error) => {
       if (error.name === 'CastError') {
