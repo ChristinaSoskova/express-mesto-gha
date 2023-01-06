@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(error);
+
 
 // eslint-disable-next-line no-undef
 app.use(router);
