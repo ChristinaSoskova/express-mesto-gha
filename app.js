@@ -4,6 +4,7 @@ const process = require("process");
 const router = require("./routes");
 require("dotenv").config();
 const bodyParser = require("body-parser");
+const { error } = require("console");
 const app = express();
 
 
@@ -19,8 +20,8 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-
 app.use(express.json());
+app.use(error);
 
 // eslint-disable-next-line no-undef
 app.use(router);
