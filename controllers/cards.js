@@ -35,11 +35,14 @@ module.exports.deleteCard = (req, res, next) => {
   cardSchema
     .findById(req.params.cardId)
     .then((card) => {
+      if (!card) {
+        return res.status(404).send({ message:'Передан несуществующий _id карточки'})
+      }
       return card.remove().then(() => res.send({ message: 'Карточка успешно удалена' }));
       })
     .catch((error) => {
       if (error.name === 'CastError') {
-        return res.status(404).send({ message:'Карточка с указанным _id не найдена.'})
+        return res.status(404).send({ message:'Некорректные данные карточки.'})
       } else {
         next(error);
       }
