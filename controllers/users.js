@@ -35,9 +35,9 @@ module.exports.getUserById = (req, res, next) => {
       res.send({ data: user });
     })
     .catch((error) => {
-      if (error.name === 'CastError') {
+      if (error.name === 'ValidationError') {
         return res.status(404).send({ message:'Пользователь по указанному _id не найден.'})
-      } else if (error.name === 'ValidationError') {
+      } if (error.name === 'CastError') {
       return res.status(400).send({ message:'Переданы некорректные данные.'})
     } else {
         next(error);
@@ -56,9 +56,9 @@ module.exports.updateInfo = (req, res, next) => {
       res.send(user);
     })
     .catch((error) => {
-      if (error.name === 'ValidtionError') {
+      if (error.name === 'CastError') {
         return res.status(400).send({ message:'Переданы некорректные данные при обновлении профиля.'})
-      } else if (error.name === 'CastError') {
+      } if (error.name === 'ValidtionError') {
         return res.status(404).send({ message:'Пользователь с указанным _id не найден.'})
       } else {
         next(error);
