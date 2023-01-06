@@ -20,7 +20,7 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.send({ data: user }))
     .catch((error) => {
       if (error.name === 'ValidationError') {
-      return res.status(404).send({ message:'Переданы некорректные данные при создании пользователя.'})
+      return res.status(400).send({ message:'Переданы некорректные данные при создании пользователя.'})
     } else {
       next(error);
     }
@@ -37,7 +37,9 @@ module.exports.getUserById = (req, res, next) => {
     .catch((error) => {
       if (error.name === 'CastError') {
         return res.status(404).send({ message:'Пользователь по указанному _id не найден.'})
-      } else {
+      } else if (error.name === 'ValidationError') {
+      return res.status(400).send({ message:'Переданы некорректные данные.'})
+    } else {
         next(error);
       }
     });
@@ -54,9 +56,9 @@ module.exports.updateInfo = (req, res, next) => {
       res.send(user);
     })
     .catch((error) => {
-      if (error.name === 'CastError') {
+      if (error.name === 'ValidationError') {
         return res.status(400).send({ message:'Переданы некорректные данные при обновлении профиля.'})
-      } else if (error.name === 'ValidationError') {
+      } else if (error.name === 'CastError') {
         return res.status(404).send({ message:'Пользователь с указанным _id не найден.'})
       } else {
         next(error);
