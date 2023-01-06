@@ -9,11 +9,11 @@ const mongoose = require('mongoose');
   },
   link: {
     type: String,
-    required: true
+    required: true,
   },
   owner:{
     type: Object,
-    required: true
+    required: true,
   },
   likes: [{
     type: Object,

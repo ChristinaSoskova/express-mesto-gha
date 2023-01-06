@@ -8,8 +8,8 @@ module.exports.createCard = (req, res, next) => {
     .create({ name, link, owner })
     .then((card) => res.send(card))
     .catch((error) => {
-      if (error.code === 400) {
-        return res.status(error).send({ message:'Переданы некорректные данные при создании карточки.'})
+      if (error.name === 'ValidationError') {
+        return res.status(400).send({ message:'Переданы некорректные данные при создании карточки.'})
       } else {
         next(error);
       }
@@ -23,8 +23,8 @@ module.exports.getCards = (req, res, next) => {
     .populate(["owner", "likes"])
     .then((cards) => res.send(cards))
     .catch((error) => {
-      if (error.code === 400) {
-        return res.status(error).send({ message:'Переданы некорректные данные при создании карточки.'})
+      if (error.name === 'ValidationError') {
+        return res.status(400).send({ message:'Переданы некорректные данные при создании карточки.'})
       } else {
         next(error);
       }
@@ -34,17 +34,11 @@ module.exports.getCards = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   const { cardId } = req.params;
-  const userId = req.user._id;
   cardSchema
     .findById(cardId)
     .then((card) => {
-      if (!card.owner.equals(userId)) {
-        console.log();
-        ("Невозможно удалить чужую карточку");
-      } else {
         card.delete();
-      }
-    })
+      })
     .catch((error) => {
       if (error.name === 'CastError') {
         return res.status(404).send({ message:'Карточка с указанным _id не найдена.'})
@@ -68,7 +62,7 @@ module.exports.likeCard = (req, res, next) =>
     .catch((error) => {
       if (error.name === 'CastError') {
         return res.status(400).send({ message:'Переданы некорректные данные для постановки/снятии лайка'})
-      } else if (error.name === 'ValidationError') {
+      } if (error.name === 'ValidationError') {
         return res.status(404).send({ message:'Передан несуществующий _id карточки'})
       } else {
         next(error);
@@ -89,7 +83,7 @@ module.exports.dislikeCard = (req, res, next) =>
     .catch((error) => {
       if (error.name === 'CastError') {
         return res.status(400).send({ message:'Переданы некорректные данные для постановки/снятии лайка'})
-      } else if (error.name === 'ValidationError') {
+      }if (error.name === 'ValidationError') {
         return res.status(404).send({ message:'Передан несуществующий _id карточки'})
       } else {
         next(error);
