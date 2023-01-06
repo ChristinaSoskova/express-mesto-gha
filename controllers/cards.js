@@ -46,8 +46,8 @@ module.exports.deleteCard = (req, res, next) => {
       }
     })
     .catch((error) => {
-      if(error.name === 404) {
-        return res.status(error).send({ message:'Карточка с указанным _id не найдена.'})
+      if (error.name === 'CastError') {
+        return res.status(404).send({ message:'Карточка с указанным _id не найдена.'})
       } else {
         next(error);
       }
@@ -66,10 +66,10 @@ module.exports.likeCard = (req, res, next) =>
       res.send(card);
     })
     .catch((error) => {
-      if (error.code === 400) {
-        return res.status(error).send({ message:'Переданы некорректные данные для постановки/снятии лайка'})
-      } if(error.name === 404) {
-        return res.status(error).send({ message:'Передан несуществующий _id карточки'})
+      if (error.name === 'CastError') {
+        return res.status(400).send({ message:'Переданы некорректные данные для постановки/снятии лайка'})
+      } else if (error.name === 'ValidationError') {
+        return res.status(404).send({ message:'Передан несуществующий _id карточки'})
       } else {
         next(error);
       }
@@ -87,10 +87,10 @@ module.exports.dislikeCard = (req, res, next) =>
       res.send(card);
     })
     .catch((error) => {
-      if (error.code === 400) {
-        return res.status(error).send({ message:'Переданы некорректные данные для постановки/снятии лайка'})
-      } if(error.name === 404) {
-        return res.status(error).send({ message:'Передан несуществующий _id карточки'})
+      if (error.name === 'CastError') {
+        return res.status(400).send({ message:'Переданы некорректные данные для постановки/снятии лайка'})
+      } else if (error.name === 'ValidationError') {
+        return res.status(404).send({ message:'Передан несуществующий _id карточки'})
       } else {
         next(error);
       }

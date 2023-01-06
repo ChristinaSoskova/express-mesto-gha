@@ -4,7 +4,6 @@ const process = require("process");
 const router = require("./routes");
 require("dotenv").config();
 const bodyParser = require("body-parser");
-const { error } = require("console");
 const app = express();
 
 

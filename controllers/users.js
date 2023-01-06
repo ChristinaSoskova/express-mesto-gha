@@ -5,8 +5,8 @@ module.exports.getUsers = (req, res, next) => {
     .find({})
     .then((users) => res.send(users))
     .catch((error) => {
-      if (error.code === 400) {
-        return res.status(error).send({ message:'Переданы некорректные данные при создании пользователя.'})
+      if (error.name === 'CastError') {
+        return res.status(400).send({ message:'Переданы некорректные данные при создании пользователя.'})
       } else {
         next(error);
       }
@@ -19,8 +19,8 @@ module.exports.createUser = (req, res, next) => {
     .create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch((error) => {
-    if (error.code === 400) {
-      return res.status(error).send({ message:'Переданы некорректные данные при создании пользователя.'})
+      if (error.name === 'ValidationError') {
+      return res.status(404).send({ message:'Переданы некорректные данные при создании пользователя.'})
     } else {
       next(error);
     }
@@ -35,8 +35,8 @@ module.exports.getUserById = (req, res, next) => {
       res.send({ data: user });
     })
     .catch((error) => {
-      if (error.code === 404) {
-        return res.status(error).send({ message:'Пользователь по указанному _id не найден.'})
+      if (error.name === 'CastError') {
+        return res.status(404).send({ message:'Пользователь по указанному _id не найден.'})
       } else {
         next(error);
       }
@@ -54,10 +54,10 @@ module.exports.updateInfo = (req, res, next) => {
       res.send(user);
     })
     .catch((error) => {
-      if (error.code === 400) {
-        return res.status(error).send({ message:'Переданы некорректные данные при обновлении профиля.'})
-      } if(error.name === 404) {
-        return res.status(error).send({ message:'Пользователь с указанным _id не найден.'})
+      if (error.name === 'CastError') {
+        return res.status(400).send({ message:'Переданы некорректные данные при обновлении профиля.'})
+      } else if (error.name === 'ValidationError') {
+        return res.status(404).send({ message:'Пользователь с указанным _id не найден.'})
       } else {
         next(error);
       }
@@ -76,10 +76,10 @@ module.exports.updateAvatar = (req, res, next) => {
       res.send(user);
     })
     .catch((error) => {
-      if (error.code === 400) {
-        return res.status(error).send({ message:'Переданы некорректные данные при обновлении аватара.'})
-      } if(error.name === 404) {
-        return res.status(error).send({ message:'Пользователь с указанным _id не найден.'})
+      if (error.name === 'CastError') {
+        return res.status(400).send({ message:'Переданы некорректные данные при обновлении аватара.'})
+      } else if (error.name === 'ValidationError') {
+        return res.status(404).send({ message:'Пользователь с указанным _id не найден.'})
       } else {
         next(error);
       }
