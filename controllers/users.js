@@ -28,22 +28,23 @@ module.exports.createUser = (req, res, next) => {
 }
 
 module.exports.getUserById = (req, res, next) => {
-  const { userId } = req.params;
   userSchema
-    .findById(userId)
+    .findById(req.params.userId)
     .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message:'Пользователь по указанному _id не найден.'})
+      }
       res.send({ data: user });
     })
     .catch((error) => {
       if (error.name === 'CastError') {
-        return res.status(404).send({ message:'Пользователь по указанному _id не найден.'})
-      } else if (error.name === 'ValidationError') {
-      return res.status(400).send({ message:'Переданы некорректные данные.'})
+        return res.status(400).send({ message:'Переданы некорректные данные.'})
     } else {
         next(error);
       }
     });
   }
+
 module.exports.updateInfo = (req, res, next) => {
   const { name, about } = req.body;
   userSchema

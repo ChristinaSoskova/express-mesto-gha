@@ -32,9 +32,8 @@ module.exports.getCards = (req, res, next) => {
 
 
 module.exports.deleteCard = (req, res, next) => {
-  const { cardId } = req.params;
   cardSchema
-    .findById(cardId)
+    .findById(req.params.cardId)
     .then((card) => {
         card.delete();
       })
@@ -54,14 +53,16 @@ module.exports.likeCard = (req, res, next) =>
       { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
       { new: true }
     )
+    .populate(['owner', 'likes'])
     .then((card) => {
-      res.send(card);
+      if (!card) {
+        return res.status(404).send({ message:'Передан несуществующий _id карточки'})
+      }
+      res.send({ data: card });
     })
     .catch((error) => {
-      if (error.name === 'ValidationError') {
+      if (error.name === 'CastError') {
         return res.status(400).send({ message:'Переданы некорректные данные для постановки/снятии лайка'})
-      } else if (error.name === 'CastError') {
-        return res.status(404).send({ message:'Передан несуществующий _id карточки'})
       } else {
         next(error);
       }
@@ -75,13 +76,14 @@ module.exports.dislikeCard = (req, res, next) =>
       { new: true }
     )
     .then((card) => {
-      res.send(card);
+      if (!card) {
+        return res.status(404).send({ message:'Передан несуществующий _id карточки'})
+      }
+      res.send({ data: card });
     })
     .catch((error) => {
-      if (error.name === 'ValidationError') {
+      if (error.name === 'CastError') {
         return res.status(400).send({ message:'Переданы некорректные данные для постановки/снятии лайка'})
-      } else if (error.name === 'CastError'){
-        return res.status(404).send({ message:'Передан несуществующий _id карточки'})
       } else {
         next(error);
       }
