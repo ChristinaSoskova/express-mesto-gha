@@ -7,17 +7,16 @@ const helmet = require("helmet");
 const app = express();
 const rateLimit = require("express-rate-limit");
 const router = require("./routes");
-const { createUsers, login } = require("./controllers/users");
+const { createUser, login } = require('./controllers/auth');
+const { validationCreateUser, validationLogin } = require('./middlewares/validations');
 const auth = require("./middlewares/auth");
-
 
 mongoose.set("strictQuery", false);
 
 const { PORT = 3000, DB = "mongodb://localhost:27017/mestodb" } = process.env;
-const { validationCreateUser, validationLogin } = require('./middlewares/validation');
 
 app.post('/signin', validationLogin, login);
-app.post('/signup', validationCreateUser, createUsers);
+app.post('/signup', validationCreateUser, createUser);
 
 app.use(auth);
 

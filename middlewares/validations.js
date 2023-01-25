@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 const isUrl = require('validator/lib/isURL');
-const BadRequest = require('../errors/BadRequest'); // 400
+const BadRequest = require('../errors/BadRequest');
 
 const validationUrl = (url) => {
   const validate = isUrl(url);
@@ -16,7 +16,6 @@ const validationID = (id) => {
   }
   throw new BadRequest('Передан некорретный id.');
 };
-
 
 module.exports.validationLogin = celebrate({
   body: Joi.object().keys({

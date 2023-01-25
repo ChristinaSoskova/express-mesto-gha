@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const BadRequest = require("../errors/BadRequest");
 const NotFound = require("../errors/NotFound");
-const AuthError = require("../errors/AuthError");
 const ConflictError = require("../errors/ConflictError");
 
 module.exports.getUsers = (req, res, next) => {
@@ -105,35 +104,6 @@ module.exports.updateAvatar = (req, res, next) => {
       }
     });
 
-  module.exports.login = (req, res, next) => {
-    const { email, password } = req.body;
-    userSchema
-      .findOne({ email })
-      .select("+password")
-      .then((user) => {
-        if (!user) {
-          throw new AuthError("Неправильные почта или пароль.");
-        }
-        return bcrypt
-          .compare(password, user.password)
-          .then((matched) => {
-            if (!matched) {
-              throw new AuthError("Неправильные почта или пароль");
-            }
-            return user;
-          })
-          .then(() => {
-            const token = jwt.sign(
-              { _id: user._id },
-              NODE_ENV === "production" ? JWT_SECRET : "dev-key",
-              { expiresIn: "7d" }
-            );
-            res.send({ token });
-          })
-          .catch(next);
-      })
-      .catch(next);
-  };
 
   module.exports.getCurrentUser = (req, res, next) => {
     userSchema
