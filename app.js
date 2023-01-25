@@ -10,12 +10,14 @@ const router = require("./routes");
 const { createUsers, login } = require("./controllers/users");
 const auth = require("./middlewares/auth");
 
+
 mongoose.set("strictQuery", false);
 
 const { PORT = 3000, DB = "mongodb://localhost:27017/mestodb" } = process.env;
+const { validationCreateUser, validationLogin } = require('./middlewares/validation');
 
-app.post("/signin", login);
-app.post("/signup", createUsers);
+app.post('/signin', validationLogin, login);
+app.post('/signup', validationCreateUser, createUsers);
 
 app.use(auth);
 
