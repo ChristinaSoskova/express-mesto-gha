@@ -34,9 +34,8 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
-
 module.exports.createUser = (req, res, next) => {
-  const { email, password, name, about, avatar } = req.body;
+  const { name, about, avatar, email, password, } = req.body;
   bcrypt
     .hash(password, 10)
     .then((hash) =>
@@ -50,10 +49,10 @@ module.exports.createUser = (req, res, next) => {
         next(
           new BadRequest(
             "Переданы некорректные данные при создании пользователя."
-          )
-        );
+          ));
       } else {
         next(error);
       }
-    });
+    })
+    .catch(next);
 };

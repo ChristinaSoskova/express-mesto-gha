@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const process = require("process");
 require("dotenv").config();
 const bodyParser = require("body-parser");
+const { errors } = require('celebrate');
 const helmet = require("helmet");
 const app = express();
 const rateLimit = require("express-rate-limit");
@@ -38,13 +39,15 @@ app.listen(PORT, () => {
   console.log(`App connect to dateBase ${DB}`);
 });
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode).send({
-    message: statusCode === 500 ? "На сервере произошла ошибка" : message,
-  });
-  next();
-});
+app.use(errors());
+
+// app.use((err, req, res, next) => {
+//   const { statusCode = 500, message } = err;
+//   res.status(statusCode).send({
+//     message: statusCode === 500 ? "На сервере произошла ошибка" : message,
+//   });
+//   next();
+// });
 
 mongoose.connect(DB);
 
