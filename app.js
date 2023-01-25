@@ -5,19 +5,19 @@ require("dotenv").config();
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const app = express();
-const rateLimit = require('express-rate-limit');
+const rateLimit = require("express-rate-limit");
 const router = require("./routes");
+const { createUsers, login } = require("./controllers/users");
+const auth = require("./middlewares/auth");
 
 mongoose.set("strictQuery", false);
 
 const { PORT = 3000, DB = "mongodb://localhost:27017/mestodb" } = process.env;
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '63b5990f90280eb0a1f6de1f', // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
-  next();
-});
+app.post("/signin", login);
+app.post("/signup", createUsers);
+
+app.use(auth);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -32,15 +32,19 @@ app.use(limiter);
 app.use(helmet());
 app.use(router);
 
-
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
   console.log(`App connect to dateBase ${DB}`);
 });
 
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    message: statusCode === 500 ? "На сервере произошла ошибка" : message,
+  });
+  next();
+});
+
 mongoose.connect(DB);
 
 module.exports = { app, DB };
-
-
-
