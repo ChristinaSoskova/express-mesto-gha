@@ -1,5 +1,6 @@
-const { celebrate, Joi } = require('celebrate');
+const {celebrate, Joi} = require('celebrate');
 const isUrl = require('validator/lib/isURL');
+const validator = require('validator');
 const BadRequest = require('../errors/BadRequest');
 
 const validationUrl = (url) => {
