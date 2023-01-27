@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -42,9 +43,7 @@ app.use(errorHandler);
 mongoose.connect(DB);
 
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
-  // eslint-disable-next-line no-console
   console.log(`App connect to dateBase ${DB}`);
 });
 
