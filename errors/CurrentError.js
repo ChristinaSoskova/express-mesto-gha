@@ -4,4 +4,4 @@ class CurrentError extends Error {
     this.statusCode = 403;
   }
 }
-export default CurrentError;
+module.exports = CurrentError;
