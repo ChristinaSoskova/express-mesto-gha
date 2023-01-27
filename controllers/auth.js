@@ -5,6 +5,7 @@ const BadRequest = require('../errors/BadRequest'); // 400
 const ConflictError = require('../errors/ConflictError'); // 409
 const AuthError = require("../errors/AuthError");
 const {NODE_ENV, JWT_SECRET} = process.env;
+
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   userSchema
@@ -38,7 +39,7 @@ module.exports.createUser = (req, res, next) => {
   const { email, password, name, about, avatar } = req.body;
   bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({ email, password: hash, name, about, avatar }))
+    .then((hash) => userSchema.create({ email, password: hash, name, about, avatar }))
     .then((user) =>
       res.status(201).send({data: user}))
     .catch((error) => {
