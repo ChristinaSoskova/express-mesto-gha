@@ -59,7 +59,7 @@ module.exports.updateInfo = (req, res, next) => {
     })
     .catch((error) => {
       // eslint-disable-next-line no-undef
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (error.name === 'ValidationError' || err.name === 'CastError') {
         next(
           new BadRequest('Переданы некорректные данные при обновлении профиля.'),
         );
@@ -82,7 +82,7 @@ module.exports.updateAvatar = (req, res, next) => {
     })
     .catch((error) => {
       // eslint-disable-next-line no-undef
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (error.name === 'ValidationError' || err.name === 'CastError') {
         next(
           new BadRequest('Переданы некорректные данные при обновлении профиля.'),
         );
