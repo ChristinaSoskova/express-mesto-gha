@@ -30,24 +30,18 @@ module.exports.getCards = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  cardSchema
-    .findById(req.params.cardId)
-    .orFail(new NotFound("Передан несуществующий _id карточки"))
+  const { cardId } = req.params;
+  return cardSchema.findById(cardId)
     .then((card) => {
+      if (!card) {
+        throw new NotFound('Пользователь не найден');
+      }
       if (!card.owner.equals(req.user._id)) {
-        throw new CurrentError("Вы не можете удалить чужую карточку");
+        return next(new CurrentError('Вы не можете удалить чужую карточку'));
       }
-      else {
-      card.remove().then(() => res.send({ message: 'Карточка успешно удалена' }));
-    }
-  })
-    .catch((error) => {
-      if (error.name === "CastError") {
-        return next(new BadRequest("Некорректные данные карточки."));
-      } else {
-        next(error);
-      }
-    });
+      return card.remove().then(() => res.send({ message: 'Карточка успешно удалена' }));
+    })
+    .catch(next);
 };
 
 module.exports.likeCard = (req, res, next) =>
