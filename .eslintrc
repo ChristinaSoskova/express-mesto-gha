@@ -2,6 +2,6 @@
     "extends": "airbnb-base",
     "rules": {
       "no-underscore-dangle":  ["off", { "allow": ["id"] }],
-      "no-trailing-space": [true, "ignore-comments"]
+      "no-trailing-spaces": ["error", { "ignoreComments": true }]
    }
   }
