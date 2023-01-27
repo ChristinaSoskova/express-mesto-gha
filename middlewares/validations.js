@@ -1,7 +1,7 @@
-const {celebrate, Joi} = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
 const isUrl = require('validator/lib/isURL');
 
-const BadRequest = require('../errors/BadRequest');
+const BadRequest = require('../errors/BadRequest').default;
 
 const validationUrl = (url) => {
   const validate = isUrl(url);
@@ -63,6 +63,6 @@ module.exports.validationCreateCard = celebrate({
 
 module.exports.validationCardById = celebrate({
   params: Joi.object().keys({
-  cardId: Joi.string().required().custom(validationID),
+    cardId: Joi.string().required().custom(validationID),
   }),
 });

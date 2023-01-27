@@ -1,20 +1,23 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const process = require("process");
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const process = require('process');
 const { errors } = require('celebrate');
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
-const router = require("./routes");
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const router = require('./routes');
 const { createUser, login } = require('./controllers/auth');
-const { validationCreateUser, validationLogin } = require('./middlewares/validations');
-const auth = require("./middlewares/auth");
-const { errorHandler } = require("./middlewares/errorHandler");
+const {
+  validationCreateUser,
+  validationLogin,
+} = require('./middlewares/validations');
+const auth = require('./middlewares/auth');
+const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
-mongoose.set("strictQuery", false);
+mongoose.set('strictQuery', false);
 
-const { PORT = 3000, DB = "mongodb://localhost:27017/mestodb" } = process.env;
+const { PORT = 3000, DB = 'mongodb://localhost:27017/mestodb' } = process.env;
 app.use(express.json());
 
 app.post('/signin', validationLogin, login);
@@ -39,7 +42,9 @@ app.use(errorHandler);
 mongoose.connect(DB);
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
+  // eslint-disable-next-line no-console
   console.log(`App connect to dateBase ${DB}`);
 });
 
