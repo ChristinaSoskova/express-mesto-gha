@@ -1,6 +1,6 @@
 const userSchema = require('../models/user');
-const BadRequest = require('../errors/BadRequest').default;
-const NotFound = require('../errors/NotFound').default;
+const BadRequest = require('../errors/BadRequest');
+const NotFound = require('../errors/NotFound');
 
 module.exports.getUsers = (req, res, next) => {
   userSchema
