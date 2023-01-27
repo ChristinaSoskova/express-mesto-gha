@@ -38,10 +38,9 @@ module.exports.deleteCard = (req, res, next) => {
         return next(new CurrentError("Вы не можете удалить чужую карточку"));
       }
       else {
-      card.delete();
-      res.send({ message: "Карточка успешно удалена" });
-      }
-    })
+        return card.remove().then(() => res.send({ message: 'Карточка успешно удалена' }));
+    }
+  })
     .catch((error) => {
       if (error.name === "CastError") {
         return next(new BadRequest("Некорректные данные карточки."));
