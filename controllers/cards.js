@@ -32,10 +32,8 @@ module.exports.getCards = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   cardSchema
     .findById(req.params.cardId)
+    .orFail(new NotFound("Передан несуществующий _id карточки"))
     .then((card) => {
-      if (!card) {
-        throw new NotFound("Передан несуществующий _id карточки");
-      }
       if (!card.owner.equals(req.user._id)) {
         return next(new CurrentError("Вы не можете удалить чужую карточку"));
       }
