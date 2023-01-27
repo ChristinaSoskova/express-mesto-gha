@@ -35,10 +35,10 @@ module.exports.deleteCard = (req, res, next) => {
     .orFail(new NotFound("Передан несуществующий _id карточки"))
     .then((card) => {
       if (!card.owner.equals(req.user._id)) {
-        return next(new CurrentError("Вы не можете удалить чужую карточку"));
+        throw new CurrentError("Вы не можете удалить чужую карточку");
       }
       else {
-        return card.remove().then(() => res.send({ message: 'Карточка успешно удалена' }));
+      card.remove().then(() => res.send({ message: 'Карточка успешно удалена' }));
     }
   })
     .catch((error) => {
